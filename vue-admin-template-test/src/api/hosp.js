@@ -47,4 +47,10 @@ export default {
             method: 'get',
         })
     },
+    getDetailSchedule(hoscode, depcode, workDate) {
+        return request({
+            url: `/admin/hosp/schedule/getDetailSchedule/${hoscode}/${depcode}/${workDate}`,
+            method: 'get',
+        })
+    },
 }
