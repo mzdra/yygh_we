@@ -1,6 +1,6 @@
 <template>
   <div class="home page-component">
-    <el-carousel indicator-position="outside">
+    <el-carousel indicator-position="initial">
       <el-carousel-item v-for="item in 2" :key="item">
         <img src="~assets/images/web-banner1.png" alt="" />
       </el-carousel-item>
@@ -12,7 +12,7 @@
           <el-autocomplete
             class="search-input"
             prefix-icon="el-icon-search"
-            v-model="state"
+            v-model="searchObj.hosname"
             :fetch-suggestions="querySearchAsync"
             placeholder="点击输入医院名称"
             @select="handleSelect"
@@ -35,107 +35,61 @@
             <div class="filter-wrapper">
               <span class="label">等级：</span>
               <div class="condition-wrapper">
-                <span class="item v-link highlight clickable selected">
-                  全部 </span
-                ><span class="item v-link clickable"> 三级医院 </span
-                ><span class="item v-link clickable"> </span
-                ><span class="item v-link clickable"> </span>
+                <span
+                  :class="hostypeActiveIndex == index ? 'selected' : ''"
+                  class="item v-link clickable"
+                  v-for="(item, index) in hostypeList"
+                  :key="index"
+                  @click="hostypeSelect(item.value, index)"
+                >
+                  {{ item.name }}</span
+                >
               </div>
             </div>
             <div class="filter-wrapper">
               <span class="label">地区：</span>
               <div class="condition-wrapper">
-                <span class="item v-link highlight clickable selected">
-                  全部 </span
-                ><span class="item v-link clickable"> 东城区 </span
-                ><span class="item v-link clickable"> 西城区 </span
-                ><span class="item v-link clickable"> 朝阳区 </span
-                ><span class="item v-link clickable"> 丰台区 </span
-                ><span class="item v-link clickable"> 石景山区 </span
-                ><span class="item v-link clickable"> 海淀区 </span
-                ><span class="item v-link clickable"> 门头沟区 </span
-                ><span class="item v-link clickable"> 房山区 </span
-                ><span class="item v-link clickable"> 通州区 </span
-                ><span class="item v-link clickable"> 顺义区 </span
-                ><span class="item v-link clickable"> 昌平区 </span
-                ><span class="item v-link clickable"> 大兴区 </span
-                ><span class="item v-link clickable"> 怀柔区 </span
-                ><span class="item v-link clickable"> 平谷区 </span
-                ><span class="item v-link clickable"> 密云区 </span
-                ><span class="item v-link clickable"> 延庆区 </span>
+                <span
+                  class="item v-link clickable"
+                  :class="provinceActiveIndex == index ? 'selected' : ''"
+                  v-for="(item, index) in districtList"
+                  :key="index"
+                  @click="districtSelect(item.value, index)"
+                >
+                  {{ item.name }}</span
+                >
               </div>
             </div>
           </div>
         </div>
         <div class="v-scroll-list hospital-list">
-          <div class="v-card clickable list-item">
+          <div
+            class="v-card clickable list-item"
+            v-for="(item, index) in list"
+            :key="index"
+          >
             <div class="">
-              <div class="hospital-list-item hos-item" index="0">
+              <div
+                class="hospital-list-item hos-item"
+                index="0"
+                @click="show(item.hoscode)"
+              >
                 <div class="wrapper">
-                  <div class="hospital-title">北京协和医院</div>
+                  <div class="hospital-title">{{ item.hosname }}</div>
                   <div class="bottom-container">
                     <div class="icon-wrapper">
                       <span class="iconfont"></span>
-                      三级甲等
+                      {{ item.param.hostypeString }}
                     </div>
                     <div class="icon-wrapper">
                       <span class="iconfont"></span>
-                      每天8:30放号
+                      每天{{ item.bookingRule.releaseTime }}放号
                     </div>
                   </div>
                 </div>
                 <img
-                  src="images/23176337663806575.png"
-                  alt="北京协和医院"
-                  class="hospital-img"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="v-card clickable list-item space">
-            <div class="">
-              <div class="hospital-list-item hos-item" index="0">
-                <div class="wrapper">
-                  <div class="hospital-title">北京协和医院</div>
-                  <div class="bottom-container">
-                    <div class="icon-wrapper">
-                      <span class="iconfont"></span>
-                      三级甲等
-                    </div>
-                    <div class="icon-wrapper">
-                      <span class="iconfont"></span>
-                      每天8:30放号
-                    </div>
-                  </div>
-                </div>
-                <img
-                  src="images/23176337663806575.png"
-                  alt="北京协和医院"
-                  class="hospital-img"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="v-card clickable list-item">
-            <div class="">
-              <div class="hospital-list-item hos-item" index="0">
-                <div class="wrapper">
-                  <div class="hospital-title">北京协和医院</div>
-                  <div class="bottom-container">
-                    <div class="icon-wrapper">
-                      <span class="iconfont"></span>
-                      三级甲等
-                    </div>
-
-                    <div class="icon-wrapper">
-                      <span class="iconfont"></span>
-                      每天8:30放号
-                    </div>
-                  </div>
-                </div>
-                <img
-                  src="images/23176337663806575.png"
-                  alt="北京协和医院"
+                  :src="'data:image/jpeg;base64,' + item.logoData"
+                  :alt="item.hosname"
                   class="hospital-img"
                 />
               </div>
@@ -159,7 +113,7 @@
             <span class="item v-link clickable dark">内科 </span>
             <span class="item v-link clickable dark">神经外科 </span>
             <span class="item v-link clickable dark">妇科 </span>
-            <span class="item v-link clickable dark"> 产科 </span>
+            <span class="item v-link clickable dark"> 产科 </span>
             <span class="item v-link clickable dark">儿科 </span>
           </div>
         </div>
@@ -244,5 +198,91 @@
   </div>
 </template>
 <script>
-export default {};
+import hospApi from "@/api/hosp";
+import dictApi from "@/api/dict";
+export default {
+  asyncData({ params, error }) {
+    return hospApi.findHospList(1, 10, null).then((response) => {
+      return {
+        list: response.data.content,
+        total: response.data.totalPages,
+      };
+    });
+  },
+  data() {
+    return {
+      searchObj: {},
+      page: 1,
+      limit: 10,
+      hosname: "", //医院名称
+      hostypeList: [], //医院等级集合
+      districtList: [], //地区集合
+      hostypeActiveIndex: 0,
+      provinceActiveIndex: 0,
+    };
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    // 医院等级，地区
+    init() {
+      dictApi.findByDictCode("Hostype").then((response) => {
+        this.hostypeList = [];
+        this.hostypeList.push({ name: "全部", value: "" });
+        for (var i = 0; i < response.data.length; i++) {
+          this.hostypeList.push(response.data[i]);
+        }
+      });
+      dictApi.findByDictCode("Beijing").then((response) => {
+        this.districtList = [];
+        this.districtList.push({ name: "全部", value: "" });
+        for (var i = 0; i < response.data.length; i++) {
+          this.districtList.push(response.data[i]);
+        }
+      });
+      console.log(this.districtList[0]);
+    },
+    // 查询医院列表
+    getHospList() {
+      hospApi.findHospList(this.page, 10, this.searchObj).then((response) => {
+        for (let i in response.data.content) {
+          this.list.push(response.data.content[i]);
+        }
+      });
+    },
+    // 医院类型筛选
+    hostypeSelect(hostype, index) {
+      this.list = [];
+      this.page = 1;
+      this.hostypeActiveIndex = index;
+      this.searchObj.hostype = hostype;
+      this.getHospList();
+    },
+    districtSelect(districtCode, index) {
+      this.list = [];
+      this.page = 1;
+      this.provinceActiveIndex = index;
+      this.searchObj.districtCode = districtCode;
+      this.getHospList();
+    },
+    // 模糊查询，搜索框输入下拉
+    querySearchAsync(hosname, cb) {
+      this.searchObj = {"hosname":hosname};
+      if (hosname == "") return;
+      hospApi.findByHosname(hosname).then((response) => {
+        for (let i = 0, len = response.data.length; i < len; i++) {
+          response.data[i].value = response.data[i].hosname;
+        }
+        cb(response.data)
+      });
+    },
+    handleSelect(item) {
+      window.location.href = "/hospital/" + item.hoscode;
+    },
+    show(hoscode) {
+      window.location.href = "/hosp/" + hoscode;
+    },
+  },
+};
 </script>

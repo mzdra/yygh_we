@@ -17,7 +17,7 @@
           <el-autocomplete
             class="search-input small"
             prefix-icon="el-icon-search"
-            v-model="state"
+            v-model="searchObj.hosname"
             :fetch-suggestions="querySearchAsync"
             placeholder="点击输入医院名称"
             @select="handleSelect"
@@ -51,5 +51,28 @@
   </div>
 </template>
 <script>
-export default {};
+import hospApi from "@/api/hosp";
+import dictApi from "@/api/dict";
+export default {
+  data() {
+    return {
+      searchObj: {},
+    };
+  },
+  methods: {
+    querySearchAsync(hosname, cb) {
+      this.searchObj = {"hosname":hosname};
+      if (hosname == "") return;
+      hospApi.findByHosname(hosname).then((response) => {
+        for (let i = 0, len = response.data.length; i < len; i++) {
+          response.data[i].value = response.data[i].hosname;
+        }
+        cb(response.data)
+      });
+    },
+    handleSelect(item) {
+      window.location.href = "/hospital/" + item.hoscode;
+    },
+  },
+};
 </script>

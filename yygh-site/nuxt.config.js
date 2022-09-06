@@ -35,7 +35,9 @@ module.exports = {
       }
     }
   },
-  plugins: [{ src: '~/plugins/myPlugin.js', ssr: false }],
+  plugins: [
+    { src: '~/plugins/myPlugin.js', ssr: true},
+  ],
   buildModules: [
     '@nuxt/postcss8'
   ]
