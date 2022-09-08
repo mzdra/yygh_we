@@ -63,7 +63,7 @@ export default {
     querySearchAsync(hosname, cb) {
       this.searchObj = {"hosname":hosname};
       if (hosname == "") return;
-      hospApi.findByHosname(hosname).then((response) => {
+      hospApi.show(hosname).then((response) => {
         for (let i = 0, len = response.data.length; i < len; i++) {
           response.data[i].value = response.data[i].hosname;
         }
@@ -71,7 +71,7 @@ export default {
       });
     },
     handleSelect(item) {
-      window.location.href = "/hospital/" + item.hoscode;
+      window.location.href = "/hosp/" + item.hoscode;
     },
   },
 };

@@ -4,25 +4,40 @@
     <!--左侧导航 #start -->
     <div class="nav left-nav">
       <div class="nav-item selected">
-        <span
+        <span class="v-link selected dark" >
+          <router-link :to="'/hosp/' + hospital.hoscode" style="text-decoration:none;color:rgb(68,144,241)">
+           预约挂号
+          </router-link>
+          </span>
+        <!-- <span
           class="v-link selected dark"
           :onclick=" 'javascript:window.location=\'/hosp/' + hospital.hoscode + '\'' ">
           预约挂号
-        </span>
+        </span> -->
       </div>
       <div class="nav-item">
-        <span
+        <!-- <span
           class="v-link clickable dark"
           :onclick="'javascript:window.location=\'/hosp/detail/' + hospital.hoscode + '\''">
           医院详情
-        </span>
+        </span> -->
+        <span class="v-link selected dark" >
+          <router-link :to="'/hosp/detail/' + hospital.hoscode" style="text-decoration:none;color:#000">
+           医院详情
+          </router-link>
+          </span>
       </div>
       <div class="nav-item">
-        <span
+        <span class="v-link selected dark" >
+          <router-link :to="'/hosp/notice/' + hospital.hoscode" style="text-decoration:none;color:#000">
+           预约须知
+          </router-link>
+          </span>
+        <!-- <span
           class="v-link clickable dark"
           :onclick="'javascript:window.location=\'/hosp/notice/' + hospital.hoscode +'\''">
           预约须知
-        </span>
+        </span> -->
       </div>
       <div class="nav-item">
         <span class="v-link clickable dark"> 停诊信息 </span>
