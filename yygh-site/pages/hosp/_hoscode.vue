@@ -4,11 +4,14 @@
     <!--左侧导航 #start -->
     <div class="nav left-nav">
       <div class="nav-item selected">
-        <span class="v-link selected dark" >
-          <router-link :to="'/hosp/' + hospital.hoscode" style="text-decoration:none;color:rgb(68,144,241)">
-           预约挂号
+        <span class="v-link selected dark">
+          <router-link
+            :to="'/hosp/' + hospital.hoscode"
+            style="text-decoration: none; color: rgb(68, 144, 241)"
+          >
+            预约挂号
           </router-link>
-          </span>
+        </span>
         <!-- <span
           class="v-link selected dark"
           :onclick=" 'javascript:window.location=\'/hosp/' + hospital.hoscode + '\'' ">
@@ -21,18 +24,24 @@
           :onclick="'javascript:window.location=\'/hosp/detail/' + hospital.hoscode + '\''">
           医院详情
         </span> -->
-        <span class="v-link selected dark" >
-          <router-link :to="'/hosp/detail/' + hospital.hoscode" style="text-decoration:none;color:#000">
-           医院详情
+        <span class="v-link selected dark">
+          <router-link
+            :to="'/hosp/detail/' + hospital.hoscode"
+            style="text-decoration: none; color: #000"
+          >
+            医院详情
           </router-link>
-          </span>
+        </span>
       </div>
       <div class="nav-item">
-        <span class="v-link selected dark" >
-          <router-link :to="'/hosp/notice/' + hospital.hoscode" style="text-decoration:none;color:#000">
-           预约须知
+        <span class="v-link selected dark">
+          <router-link
+            :to="'/hosp/notice/' + hospital.hoscode"
+            style="text-decoration: none; color: #000"
+          >
+            预约须知
           </router-link>
-          </span>
+        </span>
         <!-- <span
           class="v-link clickable dark"
           :onclick="'javascript:window.location=\'/hosp/notice/' + hospital.hoscode +'\''">
@@ -127,7 +136,7 @@
                 <div class="el-scrollbar__bar is-vertical">
                   <div
                     class="el-scrollbar__thumb"
-                    style="transform: translateY(0%);  height: 91.4761%"
+                    style="transform: translateY(0%); height: 91.4761%"
                   ></div>
                 </div>
               </div>
@@ -167,8 +176,9 @@
 <script>
 import "~/assets/css/hospital_personal.css";
 import "~/assets/css/hospital.css";
-
+import cookie from "js-cookie";
 import hospApi from "@/api/hosp";
+
 export default {
   data() {
     return {
@@ -185,25 +195,35 @@ export default {
     this.init();
   },
   methods: {
-    init(){
+    init() {
       // 查询所有科室名列表
-      this.hoscode = this.$route.params.hoscode
-      hospApi.findDepartment(this.hoscode).then(response => {
-        this.departmentVoList = response.data
+      this.hoscode = this.$route.params.hoscode;
+      hospApi.findDepartment(this.hoscode).then((response) => {
+        this.departmentVoList = response.data;
       });
       // 医院预约挂号详情
-      hospApi.findHospDetail(this.hoscode).then(response => {
+      hospApi.findHospDetail(this.hoscode).then((response) => {
         this.hospital = response.data.hospital;
         this.bookingRule = response.data.bookingRule;
-      })
+      });
     },
-    move(index, depcode){
-      this.activeIndex  = index
+    move(index, depcode) {
+      this.activeIndex = index;
       document.getElementById(depcode).scrollIntoView();
     },
-    schedule(depcode){
-
-    }
+    schedule(depcode) {
+      // 登录判断
+      let token = cookie.get("token");
+      if (!token) {
+        loginEvent.$emit("loginDialogEvent");
+        return;
+      }
+      window.location.href =
+        "/hospital/schedule?hoscode=" +
+        this.hospital.hoscode +
+        "&depcode=" +
+        depcode;
+    },
   },
 };
 </script>
