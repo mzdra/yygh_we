@@ -1,4 +1,5 @@
 <template>
+  <client-only>
   <div class="header-container">
     <div class="wrapper">
       <!-- logo -->
@@ -168,6 +169,7 @@
       </div>
     </el-dialog>
   </div>
+  </client-only>
 </template>
 <script>
 import hospApi from "@/api/hosp";
