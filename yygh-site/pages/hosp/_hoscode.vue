@@ -228,7 +228,7 @@ export default {
         }
       })
       window.location.href =
-        "/hospital/schedule?hoscode=" +
+        "/hosp/schedule?hoscode=" +
         this.hospital.hoscode +
         "&depcode=" +
         depcode;
