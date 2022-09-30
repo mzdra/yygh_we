@@ -334,16 +334,18 @@ export default {
 
     dealClass() {
       //处理样式
-      for (let i = 0; i < this.bookingScheduleList.length; i++) {
-        // depNumber -1:无号 0：约满 >0：有号
-        let curClass =
-          this.bookingScheduleList[i].availableNumber == -1
-            ? "gray space"
-            : this.bookingScheduleList[i].availableNumber == 0
-            ? "gray"
-            : "small small-space";
-        curClass += i == this.activeIndex ? " selected" : "";
-        this.bookingScheduleList[i].curClass = curClass;
+      if(this.bookingScheduleList!= null){
+        for (let i = 0; i < this.bookingScheduleList.length; i++) {
+          // depNumber -1:无号 0：约满 >0：有号
+          let curClass =
+            this.bookingScheduleList[i].availableNumber == -1
+              ? "gray space"
+              : this.bookingScheduleList[i].availableNumber == 0
+              ? "gray"
+              : "small small-space";
+          curClass += i == this.activeIndex ? " selected" : "";
+          this.bookingScheduleList[i].curClass = curClass;
+        }
       }
     },
 
