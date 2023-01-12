@@ -64,11 +64,10 @@
             <!-- selected , index == activeIndex ? 'selected' : ''-->
 
             <div
-             
               style="width: 124px"
               v-for="(item, index) in bookingScheduleList"
               :key="item.id"
-              @click="selectDate(item, index)" 
+              @click="selectDate(item, index)"
               :class="'calendar-item ' + item.curClass"
             >
               <div class="date-wrapper">
@@ -151,7 +150,13 @@
                     <div class="button-wrapper">
                       <div
                         class="v-button"
-                        @click="booking(item.id, item.availableNumber,item.hosScheduleId)"
+                        @click="
+                          booking(
+                            item.id,
+                            item.availableNumber,
+                            item.hosScheduleId
+                          )
+                        "
                         :style="
                           item.availableNumber == 0 || pageFirstStatus == -1
                             ? 'background-color: #7f828b;'
@@ -181,7 +186,7 @@
 
               下午号源
             </div>
-            <template  v-for="item in scheduleList" >
+            <template v-for="item in scheduleList">
               <div v-if="item.workTime == 1" :key="item.id">
                 <div class="list-item">
                   <div class="item-wrapper">
@@ -202,7 +207,13 @@
                     <div class="button-wrapper">
                       <div
                         class="v-button"
-                        @click="booking(item.id, item.availableNumber,item.hosScheduleId)"
+                        @click="
+                          booking(
+                            item.id,
+                            item.availableNumber,
+                            item.hosScheduleId
+                          )
+                        "
                         :style="
                           item.availableNumber == 0 || pageFirstStatus == -1
                             ? 'background-color: #7f828b;'
@@ -334,7 +345,7 @@ export default {
 
     dealClass() {
       //处理样式
-      if(this.bookingScheduleList!= null){
+      if (this.bookingScheduleList != null) {
         for (let i = 0; i < this.bookingScheduleList.length; i++) {
           // depNumber -1:无号 0：约满 >0：有号
           let curClass =
@@ -411,11 +422,15 @@ export default {
       window.location.href = "/hospital/" + this.hoscode;
     },
 
-    booking(scheduleId, availableNumber,hosScheduleId) {
+    booking(scheduleId, availableNumber, hosScheduleId) {
       if (availableNumber == 0 || this.pageFirstStatus == -1) {
         this.$message.error("不能预约");
       } else {
-        window.location.href = "/hosp/booking?scheduleId=" + scheduleId +"&hosScheduleId=" + hosScheduleId;
+        window.location.href =
+          "/hosp/booking?scheduleId=" +
+          scheduleId +
+          "&hosScheduleId=" +
+          hosScheduleId;
       }
     },
   },

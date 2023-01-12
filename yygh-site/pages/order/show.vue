@@ -170,8 +170,8 @@
         <div class="operate-view" style="height: 350px">
           <div class="wrapper wechat">
             <div>
-              <img src="images/weixin.jpg" alt="" />
-
+              <!-- <img src="images/weixin.jpg" alt="" /> -->
+              <qriously :value="payObj.codeUrl" :size="220"/>
               <div
                 style="
                   text-align: center;
@@ -194,6 +194,7 @@
 import "~/assets/css/hospital_personal.css";
 import "~/assets/css/hospital.css";
 import orderInfoApi from "@/api/orderInfo";
+import weixinApi from "@/api/wexin";
 export default {
   data() {
     return {
@@ -217,6 +218,52 @@ export default {
         this.orderInfo = response.data;
       });
     },
+    pay(){
+      weixinApi.createNative(this.orderId).then(response => {
+        this.dialogPayVisible = true;
+        this.payObj = response.data;
+        if(this.payObj.codeUrl == ""){
+          // 生成失败
+          this.dialogPayVisible = false;
+          this.$message.error('支付错误');
+        }else{
+          // 每隔3秒获取一次支付状态
+          this.timer = setInterval(() => {
+            this.queryPayStatus(this.orderId);
+          }, 3000);
+
+        }
+      })
+    },
+    queryPayStatus(orderId){
+      weixinApi.queryPayStatus(orderId).then(response => {
+        if(response.message == "支付中"){
+          return;  
+        }
+        clearInterval(this.timer);//清除定时器
+        window.location.reload();
+      })
+    },
+    closeDialog(){
+      if(this.timer){
+        clearInterval(this.timer)
+      }
+    },
+    cancelOrder() {
+      this.$confirm('确定取消预约吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+     }).then(() => { // promise
+    // 点击确定，远程调用
+    return orderInfoApi.cancelOrder(this.orderId)
+    }).then((response) => {
+      this.$message.success('取消成功')
+      this.init()
+    }).catch(() => {
+      this.$message.info('已取消取消预约')
+    })
+  }
   },
 };
 </script>

@@ -32,4 +32,11 @@ export default {
       method: 'get'
     })
   },
+  // 取消预约
+  cancelOrder(orderId) {
+    return request({
+      url: `/api/order/orderInfo/auth/cancelOrder/${orderId}`,
+      method: 'get'
+    })
+  },
 }

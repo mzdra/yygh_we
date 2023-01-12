@@ -3,14 +3,14 @@
   <div class="header-container">
     <div class="wrapper">
       <!-- logo -->
-      <div class="left-wrapper v-link selected">
+      <div class="left-wrapper v-link selected"  @click="returnIndex()">
         <img
           style="width: 50px"
           width="50"
           height="50"
           src="~assets/images/logo.png"
         />
-        <span class="text">尚医通 预约挂号统一平台</span>
+        <span class="text">医点通 预约挂号统一平台</span>
       </div>
       <!-- 搜索框 -->
       <div class="search-wrapper">
@@ -398,6 +398,9 @@ export default {
         console.log("已绑定");
         this.setCookies(name, token);
       }
+    },
+    returnIndex(){
+      window.location.href = "/";
     },
   },
 };
